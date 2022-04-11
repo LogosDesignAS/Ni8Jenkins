@@ -71,17 +71,15 @@ COPY --from=jre-build /javaruntime $JAVA_HOME
 RUN echo "PATH=${PATH}" >> /etc/environment
 COPY setup-sshd.sh /usr/local/bin/setup-sshd.sh
 COPY setup-sshd.sh ${JENKINS_AGENT_HOME}/setup-sshd.sh
-RUN /bin/bash -c "chmod 0700 /usr/local/bin/setup-sshd.sh"
-RUN /bin/bash -c "chmod 0700  $JENKINS_AGENT_HOME/setup-sshd.sh"
-RUN /bin/bash -c "chown -R jenkins:jenkins /usr/local/bin/setup-sshd.sh"
-RUN /bin/bash -c "chown -R jenkins:jenkins  $JENKINS_AGENT_HOME/setup-sshd.sh"
-
-RUN /bin/bash -c "ls -la $JENKINS_AGENT_HOME"
-RUN /bin/bash -c "cat $JENKINS_AGENT_HOME/setup-sshd.sh"
 
 ##############################################################################
 # 			Logos Payment Solutions Additions			#
 ##############################################################################
+
+RUN /bin/bash -c "chmod 0700 /usr/local/bin/setup-sshd.sh"
+RUN /bin/bash -c "chmod 0700  $JENKINS_AGENT_HOME/setup-sshd.sh"
+RUN /bin/bash -c "chown -R jenkins:jenkins /usr/local/bin/setup-sshd.sh"
+RUN /bin/bash -c "chown -R jenkins:jenkins  $JENKINS_AGENT_HOME/setup-sshd.sh"
 
 RUN apt-get update && apt-get dist-upgrade -y
 RUN apt-get install -y git vim cmake build-essential pkg-config automake make

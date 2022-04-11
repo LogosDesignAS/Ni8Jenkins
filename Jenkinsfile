@@ -43,6 +43,7 @@ pipeline {
 
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
+			# This should point to the bitbucket SSH private key
 			eval "$(ssh-add $HOMEDIR/.ssh/id_rsa)"
 
 			# Clone ni8buildroot 
@@ -81,6 +82,10 @@ pipeline {
 			# The Build it all
 			make
 
+			# Because of a known build error the build fails at the end
+			# A workaround is to force a rebuild
+			make
+			
                 """
             }
             // Save the Artifacts (Generated images)

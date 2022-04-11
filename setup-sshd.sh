@@ -29,6 +29,20 @@ set -ex
 # or
 #  docker run -e "JENKINS_AGENT_SSH_PUBKEY=<public key>" jenkins/ssh-agent
 
+# Create a overlay FS, such that the SSH directory can be mounted read only, but changes can be made
+# Credits to: https://gist.github.com/detunized/7c8fc4c37b49c5475e68ef9574587eee
+# Inside the container
+# Need to create the upper and work dirs inside a tmpfs.
+# Otherwise OverlayFS complains about AUFS folders. 
+mkdir -p /tmp/overlay
+mount -t tmpfs tmpfs /tmp/overlay
+mkdir -p /tmp/overlay/{upper,work}
+mount -t overlay overlay -o lowerdir=${HOMEDIR}/.ssh-ro,upperdir=/tmp/overlay/upper,workdir=/tmp/overlay/work ${HOMEDIR}/.ssh
+
+# Add bitbucket as a known host
+ssh-keyscan bitbucket.org >> ${HOMEDIR}/.ssh/known_hosts
+
+
 write_key() {
   local ID_GROUP
 
