@@ -44,7 +44,7 @@ pipeline {
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
 			# This should point to the bitbucket SSH private key
-			eval "$(ssh-add $HOMEDIR/.ssh/id_rsa)"
+			eval "$(ssh-add $HOMEDIR/.ssh/id_ed25519)"
 
 			# Clone ni8buildroot 
 			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
