@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'buildroot_docker' } }
+    agent { label 'agent2' }
     stages {
     	// Print all versions of the packages
         stage('Versions') {

@@ -103,6 +103,8 @@ RUN /bin/bash -c "chmod 0700 ${HOMEDIR}/.ssh"
 RUN /bin/bash -c "chown -R jenkins:jenkins ${HOMEDIR}/.ssh"
 RUN /bin/bash -c "chmod 0700 ${HOMEDIR}/.ssh"
 RUN echo "Host *.bitbucket.org\n\tStrictHostKeyChecking no\n" >> ${HOMEDIR}/.ssh/config
+# Add bitbucket to the known host
+RUN /bin/bash -c "ssh-keyscan bitbucket.org >> ${HOMEDIR}/.ssh/known_hosts"
 
 # Get buildroot
 ENV	BUILDROOT_VERSION 2022.02
