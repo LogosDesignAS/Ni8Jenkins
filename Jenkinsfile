@@ -4,7 +4,7 @@ pipeline {
     	// Print all versions of the packages
         stage('Versions') {
             steps {
-                sh """
+                sh '''
                 	# Print Docker Package Versions
 			echo $NODE_NAME - $(nproc) cores
 			uname -a
@@ -31,15 +31,15 @@ pipeline {
 			echo ============================================================
 			echo "buildroot version: "$BUILDROOT_VERSION
 			echo ============================================================
-                """
+                '''
             }
         }
         // Fetch the buildroot external
         stage('Fetching') {
             steps {
-                sh """
+                sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
-			cd git/
+			#cd git/
 
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
@@ -47,23 +47,23 @@ pipeline {
 			eval "$(ssh-add $HOMEDIR/.ssh/id_ed25519)"
 
 			# Clone ni8buildroot 
-			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
-			cd ni8buildroot
+			#git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
+			#cd ni8buildroot
 
 			# Checkout the main branch
-			git checkout main
+			#git checkout main
 
 			# Create a Symbolic link to the ni8buildroot -> buildroot-external
-			ln -s $HOMEDIR/git/ni8buildroot $HOMEDIR/buildroot-external
-			cd ../../
+			#ln -s $HOMEDIR/git/ni8buildroot $HOMEDIR/buildroot-external
+			#cd ../../
 
 			# Create Symbolic Links
 			#ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
-			ln -s buildroot-$BUILDROOT_VERSION buildroot
+			#ln -s buildroot-$BUILDROOT_VERSION buildroot
 
-			cd buildroot/
+			#cd buildroot/
 
-                """
+                '''
             }
         }
         // Run static Code Analysis here on: U-boot, OP-TEE and Logos Lib?
@@ -73,20 +73,20 @@ pipeline {
         // We need to build buildroot for both production and development, but first development
         stage('Building Buildroot Development') {
             steps {
-                sh """
+                sh '''
 		        # Shell Script for building the development version of buildroot
 
 			# Give argument to specify the configuration file for either production or development
-			make BR2_EXTERNAL=$HOMEDIR/buildroot-external logosnicore8dev_defconfig
+			#make BR2_EXTERNAL=$HOMEDIR/buildroot-external logosnicore8dev_defconfig
 
 			# The Build it all
-			make
+			#make
 
 			# Because of a known build error the build fails at the end
 			# A workaround is to force a rebuild
-			make
+			#make
 			
-                """
+                '''
             }
             // Save the Artifacts (Generated images)
             post {
@@ -102,9 +102,9 @@ pipeline {
         
         stage('Creating SDK') {
             steps {
-                sh """
+                sh '''
                 	make sdk
-                """
+                '''
             }
            // Save the Artifacts (SDK)
             post {
@@ -128,11 +128,11 @@ pipeline {
         // Cleanup and Repeat for production
 	stage('Cleanup') {
             steps {
-                sh """
-                	make clean
-                	cd ..
-                	rm -r $HOMEDIR/git/ni8buildroot
-                """
+                sh '''
+                	#make clean
+                	#cd ..
+                	#rm -r $HOMEDIR/git/ni8buildroot
+                '''
             }
 
         }
