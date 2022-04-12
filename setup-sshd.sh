@@ -54,8 +54,8 @@ write_key() {
 # This is setup by the Dockerfile at buildtime - LOGOS Payment Solutions
   #mkdir -p "${JENKINS_AGENT_HOME}/.ssh"
   echo "$1" > "${JENKINS_AGENT_HOME}/.ssh/authorized_keys"
-  #chown -Rf "${ID_GROUP}" "${JENKINS_AGENT_HOME}/.ssh"
-  #chmod 0700 -R "${JENKINS_AGENT_HOME}/.ssh"
+  chown -Rf jenkins:jenkins "${JENKINS_AGENT_HOME}/.ssh"
+  chmod 0700 -R "${JENKINS_AGENT_HOME}/.ssh"
 }
 
 if [[ ${JENKINS_AGENT_SSH_PUBKEY} == ssh-* ]]; then
