@@ -67,8 +67,24 @@ pipeline {
             }
         }
         // Run static Code Analysis here on: U-boot, OP-TEE and Logos Lib?
+	stage('Static Code Analysis') {
+            steps {
+                sh '''
+			echo "Perform Static Code Analysis - TODO: Add Static Code analysis functionality"
+                '''
+            }
+
+        }
 
         // Run Unit Test on Logos Lib and ?
+        stage('Unit Tests') {
+            steps {
+                sh '''
+			echo "Perform Unit Tests - TODO: Add Unit Test functionality"
+                '''
+            }
+
+        }
         
         // We need to build buildroot for both production and development, but first development
         stage('Building Buildroot Development') {
@@ -123,6 +139,14 @@ pipeline {
         * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
         * 	Smoketest
         */
+	stage('Smoketest') {
+            steps {
+                sh '''
+			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
+                '''
+            }
+
+        }
         
         
         // Cleanup and Repeat for production
