@@ -39,7 +39,7 @@ pipeline {
             steps {
                 sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
-			cd git/
+			cd $HOMEDIR/git
 
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
@@ -48,7 +48,7 @@ pipeline {
 
 			# Clone ni8buildroot 
 			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
-			cd ni8buildroot
+			cd $HOMEDIR/git/ni8buildroot
 
 			# Checkout the main branch
 			git checkout main
@@ -61,7 +61,7 @@ pipeline {
 			#ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
 			ln -s buildroot-$BUILDROOT_VERSION buildroot
 
-			cd buildroot/
+			cd $HOMEDIR/buildroot/
 
                 '''
             }
