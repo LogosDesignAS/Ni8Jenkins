@@ -34,14 +34,29 @@ pipeline {
                 '''
             }
         }
+       
+        stage('Fetching Buildroot') {
+            steps {
+                sh '''
+			mkdir -p ${WORKSPACE}/git
+			
+			#Fetch Buildroot
+			curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
+			
+			tar -xzf ${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${WORKSPACE}
+			rm /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
+
+                '''
+            }
+        }
+        
+        
         // Fetch the buildroot external
-        stage('Fetching') {
+        stage('Fetching Buildroot External') {
             steps {
                 sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
-                	echo $HOMEDIR
-                	echo pwd
-			cd $HOMEDIR/git
+			cd ${WORKSPACE}/git
 
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
@@ -50,20 +65,20 @@ pipeline {
 
 			# Clone ni8buildroot 
 			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
-			cd $HOMEDIR/git/ni8buildroot
+			cd ${WORKSPACE}/git/ni8buildroot
 
 			# Checkout the main branch
 			git checkout main
 
 			# Create a Symbolic link to the ni8buildroot -> buildroot-external
-			ln -s $HOMEDIR/git/ni8buildroot $HOMEDIR/buildroot-external
+			ln -s ${WORKSPACE}/git/ni8buildroot ${WORKSPACE}/buildroot-external
 			cd ../../
 
 			# Create Symbolic Links
 			#ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
-			ln -s buildroot-$BUILDROOT_VERSION buildroot
+			ln -s ${WORKSPACE}/buildroot-$BUILDROOT_VERSION buildroot
 
-			cd $HOMEDIR/buildroot/
+			cd ${WORKSPACE}/buildroot/
 
                 '''
             }
@@ -93,9 +108,10 @@ pipeline {
             steps {
                 sh '''
 		        # Shell Script for building the development version of buildroot
+		        cd ${WORKSPACE}/buildroot/
 
 			# Give argument to specify the configuration file for either production or development
-			make BR2_EXTERNAL=$HOMEDIR/buildroot-external logosnicore8dev_defconfig
+			make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
 
 			# The Build it all
 			make
@@ -110,9 +126,24 @@ pipeline {
             post {
                 success {
                     script {
-		 	archiveArtifacts artifacts: 'output/images/*', fingerprint: true
+		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/*', fingerprint: true
                     }
                 }
+                // Cleanup when failure happens
+                failure {
+            		'''
+		    		# Navigate to the build directory
+		        	cd ${WORKSPACE}/buildroot/
+		        	
+		        	# Clean up
+		        	make clean
+		        	cd ..
+		        	rm -r ${WORKSPACE}/git/ni8buildroot
+				rm -r ${WORKSPACE}/buildroot
+		        	rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+		        	rm -r ${WORKSPACE}/buildroot-external
+                	'''
+       	 }
             }
         }
         
@@ -121,6 +152,10 @@ pipeline {
         stage('Creating SDK') {
             steps {
                 sh '''
+                	# Navigate to the build directory
+                	cd ${WORKSPACE}/buildroot/
+                	
+                	# Make SDK
                 	make sdk
                 '''
             }
@@ -128,7 +163,7 @@ pipeline {
             post {
                 success {
                     script {
-		 	archiveArtifacts artifacts: 'output/host/*', fingerprint: true
+		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/host/*', fingerprint: true
                     }
                 }
             }
@@ -155,9 +190,16 @@ pipeline {
 	stage('Cleanup') {
             steps {
                 sh '''
+                       # Navigate to the build directory
+                	cd ${WORKSPACE}/buildroot/
+                	
+                	# Clean up
                 	make clean
                 	cd ..
-                	rm -r $HOMEDIR/git/ni8buildroot
+                	rm -r ${WORKSPACE}/git/ni8buildroot
+                	rm -r ${WORKSPACE}/buildroot
+                	rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+                	rm -r ${WORKSPACE}/buildroot-external
                 '''
             }
 
