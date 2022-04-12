@@ -122,29 +122,6 @@ pipeline {
 			
                 '''
             }
-            // Save the Artifacts (Generated images)
-            post {
-                success {
-                    script {
-		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/*', fingerprint: true
-                    }
-                }
-                // Cleanup when failure happens
-                failure {
-            		'''
-		    		# Navigate to the build directory
-		        	cd ${WORKSPACE}/buildroot/
-		        	
-		        	# Clean up
-		        	make clean
-		        	cd ..
-		        	rm -r ${WORKSPACE}/git/ni8buildroot
-				rm -r ${WORKSPACE}/buildroot
-		        	rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
-		        	rm -r ${WORKSPACE}/buildroot-external
-                	'''
-       	 }
-            }
         }
         
         // In the future we might want to run qemu here testing the kernel and application?
@@ -158,14 +135,6 @@ pipeline {
                 	# Make SDK
                 	make sdk
                 '''
-            }
-           // Save the Artifacts (SDK)
-            post {
-                success {
-                    script {
-		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/host/*', fingerprint: true
-                    }
-                }
             }
         }
         
@@ -207,4 +176,29 @@ pipeline {
         
         
     }
+	// Save the Artifacts (Generated images)
+	post {
+		success {
+		    script {
+		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/*', fingerprint: true
+		    }
+		}
+		// Cleanup when failure happens
+		failure {
+		      steps {
+			'''
+		    		# Navigate to the build directory
+				cd ${WORKSPACE}/buildroot/
+				
+				# Clean up
+				make clean
+				cd ..
+				rm -r ${WORKSPACE}/git/ni8buildroot
+				rm -r ${WORKSPACE}/buildroot
+				rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+				rm -r ${WORKSPACE}/buildroot-external
+			'''
+			}  
+		}
+	}
 }
