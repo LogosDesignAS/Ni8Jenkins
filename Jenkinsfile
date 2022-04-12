@@ -39,7 +39,7 @@ pipeline {
             steps {
                 sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
-			#cd git/
+			cd git/
 
 			# Initialise the SSH agent
 			eval "$(ssh-agent -s)"
@@ -47,21 +47,21 @@ pipeline {
 			eval "$(ssh-add $HOMEDIR/.ssh/id_ed25519)"
 
 			# Clone ni8buildroot 
-			#git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
-			#cd ni8buildroot
+			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
+			cd ni8buildroot
 
 			# Checkout the main branch
-			#git checkout main
+			git checkout main
 
 			# Create a Symbolic link to the ni8buildroot -> buildroot-external
-			#ln -s $HOMEDIR/git/ni8buildroot $HOMEDIR/buildroot-external
-			#cd ../../
+			ln -s $HOMEDIR/git/ni8buildroot $HOMEDIR/buildroot-external
+			cd ../../
 
 			# Create Symbolic Links
 			#ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
-			#ln -s buildroot-$BUILDROOT_VERSION buildroot
+			ln -s buildroot-$BUILDROOT_VERSION buildroot
 
-			#cd buildroot/
+			cd buildroot/
 
                 '''
             }
@@ -77,14 +77,14 @@ pipeline {
 		        # Shell Script for building the development version of buildroot
 
 			# Give argument to specify the configuration file for either production or development
-			#make BR2_EXTERNAL=$HOMEDIR/buildroot-external logosnicore8dev_defconfig
+			make BR2_EXTERNAL=$HOMEDIR/buildroot-external logosnicore8dev_defconfig
 
 			# The Build it all
-			#make
+			make
 
 			# Because of a known build error the build fails at the end
 			# A workaround is to force a rebuild
-			#make
+			make
 			
                 '''
             }
@@ -129,9 +129,9 @@ pipeline {
 	stage('Cleanup') {
             steps {
                 sh '''
-                	#make clean
-                	#cd ..
-                	#rm -r $HOMEDIR/git/ni8buildroot
+                	make clean
+                	cd ..
+                	rm -r $HOMEDIR/git/ni8buildroot
                 '''
             }
 
