@@ -39,6 +39,8 @@ pipeline {
             steps {
                 sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
+                	echo $HOMEDIR
+                	echo pwd
 			cd $HOMEDIR/git
 
 			# Initialise the SSH agent
