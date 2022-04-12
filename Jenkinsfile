@@ -185,7 +185,8 @@ pipeline {
 		}
 		// Cleanup when failure happens
 		failure {
-		      steps {
+		      script {
+		      		echo ‘The Build has failed, cleanup’
 				sh '''
 			    		# Navigate to the build directory
 					cd ${WORKSPACE}/buildroot/
