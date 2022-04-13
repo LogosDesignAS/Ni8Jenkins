@@ -191,7 +191,7 @@ pipeline {
 	post {
 		success {
 		    script {
-		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/', fingerprint: true
+		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/emmc.img', fingerprint: true
 		    }
 		}
 		// Cleanup when failure happens
