@@ -106,17 +106,26 @@ pipeline {
         // We need to build buildroot for both production and development, but first development
         stage('Building Buildroot Development') {
             steps {
-                sh '''
-		        # Shell Script for building the development version of buildroot
-		        cd ${WORKSPACE}/buildroot/
+            		try {
+				sh '''
+					# Shell Script for building the development version of buildroot
+					cd ${WORKSPACE}/buildroot/
 
-			# Give argument to specify the configuration file for either production or development
-			make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
+					# Give argument to specify the configuration file for either production or development
+					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
 
-			# The Build it all
-			make
-			
-                '''
+					# The Build it all
+					make
+				'''
+			} catch (Exception e) {
+			  	sh '''
+      					echo 'Exception occurred: ' + e.toString()
+      					
+      					# Known error: try make again to resolve it and continue build
+      					make
+      				'''
+  			}
+
             }
         }
         
