@@ -130,8 +130,9 @@ pipeline {
       					#make
       					
       					# If the script Continous, the work arround word - set the build to be successfull
-      					${currentBuild.currentResult} = 'SUCCESS'
+      					#${currentBuild.currentResult} = 'SUCCESS'
       				'''
+      				currentBuild.result = 'SUCCESS'
   			}
 		}
             }
