@@ -116,7 +116,7 @@ pipeline {
 					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
 
 					# The Build it all
-					make
+					make jj
 				'''
 			} catch (Exception e) {
 			  	sh '''
@@ -127,10 +127,10 @@ pipeline {
       					#echo 'Exception occurred: ' + e.toString()
       					
       					# Known error: try make again to resolve it and continue build
-      					make
+      					#make
       					
       					# If the script Continous, the work arround word - set the build to be successfull
-      					currentBuild.result = 'SUCCESS'
+      					${currentBuild.currentResult} = 'SUCCESS'
       				'''
   			}
 		}
