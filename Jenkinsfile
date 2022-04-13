@@ -127,10 +127,7 @@ pipeline {
       					#echo 'Exception occurred: ' + e.toString()
       					
       					# Known error: try make again to resolve it and continue build
-      					#make
-      					
-      					# If the script Continous, the work arround word - set the build to be successfull
-      					#${currentBuild.currentResult} = 'SUCCESS'
+      					make
       				'''
       				currentBuild.result = 'SUCCESS'
   			}
