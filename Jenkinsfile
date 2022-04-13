@@ -120,7 +120,11 @@ pipeline {
 				'''
 			} catch (Exception e) {
 			  	sh '''
-      					echo 'Exception occurred: ' + e.toString()
+			  		# Go to Directory
+					cd ${WORKSPACE}/buildroot/
+					
+					# Print Error
+      					#echo 'Exception occurred: ' + e.toString()
       					
       					# Known error: try make again to resolve it and continue build
       					make
