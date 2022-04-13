@@ -115,10 +115,6 @@ pipeline {
 
 			# The Build it all
 			make
-
-			# Because of a known build error the build fails at the end
-			# A workaround is to force a rebuild
-			make
 			
                 '''
             }
