@@ -116,7 +116,7 @@ pipeline {
 					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
 
 					# The Build it all
-					make jj
+					make
 				'''
 			} catch (Exception e) {
 			  	sh '''
