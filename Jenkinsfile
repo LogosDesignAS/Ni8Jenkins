@@ -106,6 +106,7 @@ pipeline {
         // We need to build buildroot for both production and development, but first development
         stage('Building Buildroot Development') {
             steps {
+            	script {
             		try {
 				sh '''
 					# Shell Script for building the development version of buildroot
@@ -125,7 +126,7 @@ pipeline {
       					make
       				'''
   			}
-
+		}
             }
         }
         
