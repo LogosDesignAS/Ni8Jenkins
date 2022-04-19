@@ -148,6 +148,18 @@ pipeline {
                 '''
             }
         }
+       // Upload build files to tftp server
+	stage('Upload Files to TFTP') {
+            steps {
+                sh '''
+                       # Navigate to the build output directory
+                	cd ${WORKSPACE}/buildroot/output
+                	
+                	# TODO: Add code to commit files to the tftp
+                '''
+            }
+
+        }
         
         /*
         *	Run Smoketest
@@ -189,11 +201,14 @@ pipeline {
     }
 	// Save the Artifacts (Generated images)
 	post {
+		// Save artifacts to tftp server - moved to other stage
+		/*
 		success {
 		    script {
 		 	archiveArtifacts artifacts: '${WORKSPACE}/buildroot/output/images/emmc.img', fingerprint: true
 		    }
 		}
+		*/
 		// Cleanup when failure happens
 		failure {
 		      script {
