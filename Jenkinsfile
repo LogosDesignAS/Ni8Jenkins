@@ -137,7 +137,7 @@ pipeline {
         
         // In the future we might want to run qemu here testing the kernel and application?
         
-        stage('Creating SDK') {
+        stage('Creating SDK - Development') {
             steps {
                 sh '''
                 	# Navigate to the build directory
@@ -149,7 +149,7 @@ pipeline {
             }
         }
        // Upload build files to tftp server
-	stage('Upload Files to TFTP') {
+	stage('Upload Files to TFTP - Dev') {
             steps {
                 sh '''
                        # Navigate to the build output directory
@@ -168,7 +168,7 @@ pipeline {
         * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
         * 	Smoketest
         */
-	stage('Smoketest') {
+	stage('Smoketest - Dev') {
             steps {
                 sh '''
 			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
@@ -179,7 +179,7 @@ pipeline {
         
         
         // Cleanup and Repeat for production
-	stage('Cleanup') {
+	stage('Cleanup - Dev') {
             steps {
                 sh '''
                        # Navigate to the build directory
@@ -226,7 +226,7 @@ pipeline {
         
         // In the future we might want to run qemu here testing the kernel and application?
         
-        stage('Creating SDK') {
+        stage('Creating SDK - Prod') {
             steps {
                 sh '''
                 	# Navigate to the build directory
@@ -238,7 +238,7 @@ pipeline {
             }
         }
        // Upload build files to tftp server
-	stage('Upload Files to TFTP') {
+	stage('Upload Files to TFTP - Prod') {
             steps {
                 sh '''
                        # Navigate to the build output directory
@@ -257,7 +257,7 @@ pipeline {
         * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
         * 	Smoketest
         */
-	stage('Smoketest') {
+	stage('Smoketest - Prod') {
             steps {
                 sh '''
 			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
