@@ -187,6 +187,95 @@ pipeline {
                 	
                 	# Clean up
                 	make clean
+                '''
+            }
+
+        }
+        
+         // We need to build buildroot for both production and development,now build for production
+        stage('Building Buildroot Production') {
+            steps {
+            	script {
+            		try {
+				sh '''
+					# Shell Script for building the development version of buildroot
+					cd ${WORKSPACE}/buildroot/
+
+					# Give argument to specify the configuration file for either production or development
+					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8_defconfig
+
+					# The Build it all
+					make
+				'''
+			} catch (Exception e) {
+			  	sh '''
+			  		# Go to Directory
+					cd ${WORKSPACE}/buildroot/
+					
+					# Print Error
+      					#echo 'Exception occurred: ' + e.toString()
+      					
+      					# Known error: try make again to resolve it and continue build
+      					make
+      				'''
+      				currentBuild.result = 'SUCCESS'
+  			}
+		}
+            }
+        }
+        
+        // In the future we might want to run qemu here testing the kernel and application?
+        
+        stage('Creating SDK') {
+            steps {
+                sh '''
+                	# Navigate to the build directory
+                	cd ${WORKSPACE}/buildroot/
+                	
+                	# Make SDK
+                	make sdk
+                '''
+            }
+        }
+       // Upload build files to tftp server
+	stage('Upload Files to TFTP') {
+            steps {
+                sh '''
+                       # Navigate to the build output directory
+                	cd ${WORKSPACE}/buildroot/output
+                	
+                	# TODO: Add code to commit files to the tftp
+                '''
+            }
+
+        }
+        
+        /*
+        *	Run Smoketest
+        *	Eg. SSH into a Raspberry Pi connected to Nicore8 and any carrier board
+        *	Run a Python Script that uses the serial connection to:  Load the built bootloader, OP-TEE and kernel. 
+        * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
+        * 	Smoketest
+        */
+	stage('Smoketest') {
+            steps {
+                sh '''
+			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
+                '''
+            }
+
+        }
+        
+        
+        // Cleanup after building both the Production and development image
+	stage('Cleanup') {
+            steps {
+                sh '''
+                       # Navigate to the build directory
+                	cd ${WORKSPACE}/buildroot/
+                	
+                	# Clean up
+                	make clean
                 	cd ..
                 	rm -r ${WORKSPACE}/git/ni8buildroot
                 	rm -r ${WORKSPACE}/buildroot
