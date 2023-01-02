@@ -105,7 +105,7 @@ RUN echo "Host *.bitbucket.org\n\tStrictHostKeyChecking no\n" >> ${HOMEDIR}/.ssh
 RUN /bin/bash -c "ssh-keyscan bitbucket.org >> ${HOMEDIR}/.ssh/known_hosts"
 
 # Get buildroot - Define BUILDROOT Version
-ENV	BUILDROOT_VERSION 2022.02.4
+ENV	BUILDROOT_VERSION 2022.02.8
 RUN	curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /tmp/buildroot-${BUILDROOT_VERSION}.tar.gz \
 	&& mkdir -p ${HOMEDIR}/git \
 	&& tar -xzf /tmp/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${HOMEDIR} \
