@@ -67,8 +67,8 @@ pipeline {
 			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
 			cd ${WORKSPACE}/git/ni8buildroot
 
-			# Checkout the main branch
-			git checkout main
+			# Checkout the dev branch
+			git checkout dev
 
 			# Create a Symbolic link to the ni8buildroot -> buildroot-external
 			ln -s ${WORKSPACE}/git/ni8buildroot ${WORKSPACE}/buildroot-external
