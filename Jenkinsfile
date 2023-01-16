@@ -6,31 +6,31 @@ pipeline {
             steps {
                 sh '''
                 	# Print Docker Package Versions
-			echo $NODE_NAME - $(nproc) cores
-			uname -a
-			echo ============================================================
-			cmake --version
-			echo ============================================================
-			gcc --version
-			echo ============================================================
-			cppcheck --version
-			echo ============================================================
-			git --version
-			echo ============================================================
-			wget --version 
-			echo ============================================================
-			cpio --version
-			echo ============================================================
-			unzip -v
-			echo ============================================================
-			rsync --version
-			echo ============================================================
-			bc --version
-			echo ============================================================
-			mkimage -V
-			echo ============================================================
-			echo "buildroot version: "$BUILDROOT_VERSION
-			echo ============================================================
+                    echo $NODE_NAME - $(nproc) cores
+                    uname -a
+                    echo ============================================================
+                    cmake --version
+                    echo ============================================================
+                    gcc --version
+                    echo ============================================================
+                    cppcheck --version
+                    echo ============================================================
+                    git --version
+                    echo ============================================================
+                    wget --version
+                    echo ============================================================
+                    cpio --version
+                    echo ============================================================
+                    unzip -v
+                    echo ============================================================
+                    rsync --version
+                    echo ============================================================
+                    bc --version
+                    echo ============================================================
+                    mkimage -V
+                    echo ============================================================
+                    echo "buildroot version: "$BUILDROOT_VERSION
+                    echo ============================================================
                 '''
             }
         }
@@ -38,14 +38,13 @@ pipeline {
         stage('Fetching Buildroot') {
             steps {
                 sh '''
-			mkdir -p ${WORKSPACE}/git
-			
-			#Fetch Buildroot
-			curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
-			
-			tar -xzf ${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${WORKSPACE}
-			rm /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
+                    mkdir -p ${WORKSPACE}/git
 
+                    #Fetch Buildroot
+                    curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
+
+                    tar -xzf ${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${WORKSPACE}
+                    rm /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
                 '''
             }
         }
@@ -56,30 +55,29 @@ pipeline {
             steps {
                 sh '''
                 	# Fetch Software from bitbucket master branch (Buildroot external) (Using SSH)
-			cd ${WORKSPACE}/git
+                    cd ${WORKSPACE}/git
 
-			# Initialise the SSH agent
-			eval "$(ssh-agent -s)"
-			# This should point to the bitbucket SSH private key
-			eval "$(ssh-add $HOMEDIR/.ssh/id_ed25519)"
+                    # Initialise the SSH agent
+                    eval "$(ssh-agent -s)"
+                    # This should point to the bitbucket SSH private key
+                    eval "$(ssh-add $HOMEDIR/.ssh/id_ed25519)"
 
-			# Clone ni8buildroot 
-			git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
-			cd ${WORKSPACE}/git/ni8buildroot
+                    # Clone ni8buildroot
+                    git clone git@bitbucket.org:logospaymentsolutions/ni8buildroot.git
+                    cd ${WORKSPACE}/git/ni8buildroot
 
-			# Checkout the dev branch
-			git checkout dev
+                    # Checkout the dev branch
+                    git checkout dev
 
-			# Create a Symbolic link to the ni8buildroot -> buildroot-external
-			ln -s ${WORKSPACE}/git/ni8buildroot ${WORKSPACE}/buildroot-external
-			cd ../../
+                    # Create a Symbolic link to the ni8buildroot -> buildroot-external
+                    ln -s ${WORKSPACE}/git/ni8buildroot ${WORKSPACE}/buildroot-external
+                    cd ../../
 
-			# Create Symbolic Links
-			#ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
-			ln -s ${WORKSPACE}/buildroot-$BUILDROOT_VERSION buildroot
+                    # Create Symbolic Links
+                    #ln -s buildroot-$BUILDROOT_VERSION-dl buildroot-dl
+                    ln -s ${WORKSPACE}/buildroot-$BUILDROOT_VERSION buildroot
 
-			cd ${WORKSPACE}/buildroot/
-
+                    cd ${WORKSPACE}/buildroot/
                 '''
             }
         }
@@ -87,7 +85,7 @@ pipeline {
 	stage('Static Code Analysis') {
             steps {
                 sh '''
-			echo "Perform Static Code Analysis - TODO: Add Static Code analysis functionality"
+                    echo "Perform Static Code Analysis - TODO: Add Static Code analysis functionality"
                 '''
             }
 
@@ -97,7 +95,7 @@ pipeline {
         stage('Unit Tests') {
             steps {
                 sh '''
-			echo "Perform Unit Tests - TODO: Add Unit Test functionality"
+                    echo "Perform Unit Tests - TODO: Add Unit Test functionality"
                 '''
             }
 
@@ -109,25 +107,25 @@ pipeline {
             	script {
             		try {
 				sh '''
-					# Shell Script for building the development version of buildroot
-					cd ${WORKSPACE}/buildroot/
+                    # Shell Script for building the development version of buildroot
+                    cd ${WORKSPACE}/buildroot/
 
-					# Give argument to specify the configuration file for either production or development
-					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
+                    # Give argument to specify the configuration file for either production or development
+                    make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8dev_defconfig
 
-					# The Build it all
-					make
+                    # The Build it all
+                    make
 				'''
 			} catch (Exception e) {
 			  	sh '''
-			  		# Go to Directory
-					cd ${WORKSPACE}/buildroot/
-					
-					# Print Error
-      					#echo 'Exception occurred: ' + e.toString()
-      					
-      					# Known error: try make again to resolve it and continue build
-      					make
+                    # Go to Directory
+                    cd ${WORKSPACE}/buildroot/
+
+                    # Print Error
+                        #echo 'Exception occurred: ' + e.toString()
+
+                        # Known error: try make again to resolve it and continue build
+                        make
       				'''
       				currentBuild.result = 'SUCCESS'
   			}
@@ -140,11 +138,11 @@ pipeline {
         stage('Creating SDK - Development') {
             steps {
                 sh '''
-                	# Navigate to the build directory
-                	cd ${WORKSPACE}/buildroot/
-                	
-                	# Make SDK
-                	make sdk
+                    # Navigate to the build directory
+                    cd ${WORKSPACE}/buildroot/
+
+                    # Make SDK
+                    make sdk
                 '''
             }
         }
@@ -153,9 +151,9 @@ pipeline {
             steps {
                 sh '''
                        # Navigate to the build output directory
-                	cd ${WORKSPACE}/buildroot/output
-                	
-                	# TODO: Add code to commit files to the tftp
+                    cd ${WORKSPACE}/buildroot/output
+
+                    # TODO: Add code to commit files to the tftp
                 '''
             }
 
@@ -171,7 +169,7 @@ pipeline {
 	stage('Smoketest - Dev') {
             steps {
                 sh '''
-			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
+                    echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
                 '''
             }
 
@@ -182,11 +180,11 @@ pipeline {
 	stage('Cleanup - Dev') {
             steps {
                 sh '''
-                       # Navigate to the build directory
-                	cd ${WORKSPACE}/buildroot/
-                	
-                	# Clean up
-                	make clean
+                    # Navigate to the build directory
+                    cd ${WORKSPACE}/buildroot/
+
+                    # Clean up
+                    make clean
                 '''
             }
 
@@ -198,25 +196,25 @@ pipeline {
             	script {
             		try {
 				sh '''
-					# Shell Script for building the development version of buildroot
-					cd ${WORKSPACE}/buildroot/
+                    # Shell Script for building the development version of buildroot
+                    cd ${WORKSPACE}/buildroot/
 
-					# Give argument to specify the configuration file for either production or development
-					make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8_defconfig
+                    # Give argument to specify the configuration file for either production or development
+                    make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8_defconfig
 
-					# The Build it all
-					make
+                    # The Build it all
+                    make
 				'''
 			} catch (Exception e) {
 			  	sh '''
-			  		# Go to Directory
-					cd ${WORKSPACE}/buildroot/
-					
-					# Print Error
-      					#echo 'Exception occurred: ' + e.toString()
-      					
-      					# Known error: try make again to resolve it and continue build
-      					make
+                    # Go to Directory
+                    cd ${WORKSPACE}/buildroot/
+
+                    # Print Error
+                        #echo 'Exception occurred: ' + e.toString()
+
+                        # Known error: try make again to resolve it and continue build
+                        make
       				'''
       				currentBuild.result = 'SUCCESS'
   			}
@@ -242,9 +240,9 @@ pipeline {
             steps {
                 sh '''
                        # Navigate to the build output directory
-                	cd ${WORKSPACE}/buildroot/output
-                	
-                	# TODO: Add code to commit files to the tftp
+                        cd ${WORKSPACE}/buildroot/output
+
+                        # TODO: Add code to commit files to the tftp
                 '''
             }
 
@@ -260,7 +258,7 @@ pipeline {
 	stage('Smoketest - Prod') {
             steps {
                 sh '''
-			echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
+			        echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
                 '''
             }
 
@@ -268,25 +266,116 @@ pipeline {
         
         
         // Cleanup after building both the Production and development image
-	stage('Cleanup') {
+	stage('Cleanup - Prod') {
             steps {
                 sh '''
                        # Navigate to the build directory
-                	cd ${WORKSPACE}/buildroot/
-                	
-                	# Clean up
-                	make clean
-                	cd ..
-                	rm -r ${WORKSPACE}/git/ni8buildroot
-                	rm -r ${WORKSPACE}/buildroot
-                	rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
-                	rm -r ${WORKSPACE}/buildroot-external
+                        cd ${WORKSPACE}/buildroot/
+
+                        # Clean up
+                        make clean
+                        cd ..
+                        rm -r ${WORKSPACE}/git/ni8buildroot
+                        rm -r ${WORKSPACE}/buildroot
+                        rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+                        rm -r ${WORKSPACE}/buildroot-external
                 '''
             }
 
         }
-        
-        
+
+             // We need to build buildroot for both production and development,now build for production
+            stage('Building Buildroot Toolbox') {
+                steps {
+                    script {
+                        try {
+                    sh '''
+                        # Shell Script for building the development version of buildroot
+                        cd ${WORKSPACE}/buildroot/
+
+                        # Give argument to specify the configuration file for either production or development
+                        make BR2_EXTERNAL=${WORKSPACE}/buildroot-external logosnicore8toolboxdev_defconfig
+
+                        # The Build it all
+                        make
+                    '''
+                } catch (Exception e) {
+                    sh '''
+                        # Go to Directory
+                        cd ${WORKSPACE}/buildroot/
+
+                        # Print Error
+                            #echo 'Exception occurred: ' + e.toString()
+
+                            # Known error: try make again to resolve it and continue build
+                            make
+                        '''
+                        currentBuild.result = 'SUCCESS'
+                }
+            }
+                }
+            }
+
+            // In the future we might want to run qemu here testing the kernel and application?
+
+            stage('Creating SDK - Toolbox') {
+                steps {
+                    sh '''
+                        # Navigate to the build directory
+                        cd ${WORKSPACE}/buildroot/
+
+                        # Make SDK
+                        make sdk
+                    '''
+                }
+            }
+           // Upload build files to tftp server
+        stage('Upload Files to TFTP - Toolbox') {
+                steps {
+                    sh '''
+                           # Navigate to the build output directory
+                        cd ${WORKSPACE}/buildroot/output
+
+                        # TODO: Add code to commit files to the tftp
+                    '''
+                }
+
+            }
+
+            /*
+            *	Run Smoketest
+            *	Eg. SSH into a Raspberry Pi connected to Nicore8 and any carrier board
+            *	Run a Python Script that uses the serial connection to:  Load the built bootloader, OP-TEE and kernel.
+            * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
+            * 	Smoketest
+            */
+        stage('Smoketest - Toolbox') {
+                steps {
+                    sh '''
+                echo "Connect to another agent to run the smoketest - TODO: Add smoketest functionality"
+                    '''
+                }
+
+            }
+
+
+            // Cleanup after building both the Production and development image
+        stage('Cleanup - Toolbox') {
+                steps {
+                    sh '''
+                           # Navigate to the build directory
+                        cd ${WORKSPACE}/buildroot/
+
+                        # Clean up
+                        make clean
+                        cd ..
+                        rm -r ${WORKSPACE}/git/ni8buildroot
+                        rm -r ${WORKSPACE}/buildroot
+                        rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+                        rm -r ${WORKSPACE}/buildroot-external
+                    '''
+                }
+         }
     }
 	// Save the Artifacts (Generated images)
 	post {
@@ -302,17 +391,17 @@ pipeline {
 		failure {
 		      script {
 				sh '''
-					echo "The Build has failed, cleanup"
-			    		# Navigate to the build directory
-					cd ${WORKSPACE}/buildroot/
-					
-					# Clean up
-					make clean
-					cd ..
-					rm -r ${WORKSPACE}/git/ni8buildroot
-					rm -r ${WORKSPACE}/buildroot
-					rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
-					rm -r ${WORKSPACE}/buildroot-external
+                    echo "The Build has failed, cleanup"
+                        # Navigate to the build directory
+                    cd ${WORKSPACE}/buildroot/
+
+                    # Clean up
+                    make clean
+                    cd ..
+                    rm -r ${WORKSPACE}/git/ni8buildroot
+                    rm -r ${WORKSPACE}/buildroot
+                    rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
+                    rm -r ${WORKSPACE}/buildroot-external
 				'''
 			}  
 		}
