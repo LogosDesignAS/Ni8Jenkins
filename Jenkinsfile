@@ -275,10 +275,6 @@ pipeline {
                         # Clean up
                         make clean
                         cd ..
-                        rm -r ${WORKSPACE}/git/ni8buildroot
-                        rm -r ${WORKSPACE}/buildroot
-                        rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
-                        rm -r ${WORKSPACE}/buildroot-external
                 '''
             }
 
