@@ -338,6 +338,34 @@ pipeline {
 
             }
 
+        stage('Generate report') {
+                steps {
+                    sh '''
+                        # Install make 4.4 since 4.3 doesn't work with pkg-stats
+                        cd ${WORKSPACE}/buildroot
+                       /home/jenkins/make-4.4/make pkg-stats
+                       /home/jenkins/make-4.4/make legal-info
+                    '''
+                }
+
+            }
+
+        stage('Upload report to tftp') {
+                steps {
+                    sh '''
+                           # Navigate to the build output directory
+                        cd ${WORKSPACE}/buildroot/output
+                        
+                        cp output/pkg-stats.html /srv/www/ni8/buildroot_report/
+
+                        cp -R output/legal-info /srv/www/ni8/buildroot_report/
+                        
+                        # TODO: Add code to commit files to the tftp
+                    '''
+                }
+
+            }
+
             /*
             *	Run Smoketest
             *	Eg. SSH into a Raspberry Pi connected to Nicore8 and any carrier board

@@ -96,6 +96,24 @@ ENV HOMEDIR /home/jenkins
 WORKDIR ${HOMEDIR}
 ENV HOME ${HOMEDIR}
 
+# Report dependencies
+
+## Python
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+## make-4.4
+RUN wget -c https://ftp.gnu.org/gnu/make/make-4.4.tar.gz -O - | tar -xz
+WORKDIR make-4.4
+RUN ./configure
+RUN make
+RUN make install
+WORKDIR ${HOMEDIR}
+
+
+
 RUN /bin/bash -c "mkdir -p ${HOMEDIR}/.ssh" && ls -la ${HOMEDIR}
 RUN /bin/bash -c "chmod 0700 ${HOMEDIR}/.ssh"
 RUN /bin/bash -c "chown -R jenkins:jenkins ${HOMEDIR}/.ssh"
@@ -110,6 +128,9 @@ RUN	curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.ta
 	&& mkdir -p ${HOMEDIR}/git \
 	&& tar -xzf /tmp/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${HOMEDIR} \
 	&& rm /tmp/buildroot-${BUILDROOT_VERSION}.tar.gz
+
+
+
 
 ##############################################################################
 # 		End of Logos Payment Solutions Additions			#
