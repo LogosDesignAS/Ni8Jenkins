@@ -109,7 +109,7 @@ RUN wget -c https://ftp.gnu.org/gnu/make/make-4.4.tar.gz -O - | tar -xz
 WORKDIR make-4.4
 RUN ./configure
 RUN make
-RUN make install
+
 WORKDIR ${HOMEDIR}
 
 
