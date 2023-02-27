@@ -42,14 +42,8 @@ pipeline {
 
                     #Fetch Buildroot
                     cd ${WORKSPACE}
-                    git clone https://github.com/buildroot/buildroot.git
-                    cd buildroot/
-                    git checkout ${BUILDROOT_VERSION}
+                    git clone -b ${BUILDROOT_VERSION} --single-branch https://github.com/buildroot/buildroot.git
 
-                    #curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
-
-                    #tar -xzf ${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz -C ${WORKSPACE}
-                    #rm /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
                 '''
             }
         }
