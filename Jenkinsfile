@@ -44,7 +44,7 @@ pipeline {
                     cd ${WORKSPACE}
                     git clone https://github.com/buildroot/buildroot.git
                     cd buildroot/
-                    git checkout 2022.02.4
+                    git checkout ${BUILDROOT_VERSION}
 
                     #curl -sSL "https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -o /${WORKSPACE}/buildroot-${BUILDROOT_VERSION}.tar.gz
 
