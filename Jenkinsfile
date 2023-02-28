@@ -353,7 +353,7 @@ pipeline {
                 steps {
                     sh '''
                            # Navigate to the build output directory
-                        cd ${WORKSPACE}/buildroot/output
+                        cd ${WORKSPACE}/buildroot
                         
                         cp output/pkg-stats.html /srv/www/ni8/buildroot_report/
 
