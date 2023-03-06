@@ -340,10 +340,25 @@ pipeline {
         stage('Generate report') {
                 steps {
                     sh '''
-                        # Install make 4.4 since 4.3 doesn't work with pkg-stats
+                        
                         cd ${WORKSPACE}/buildroot
-                       /home/jenkins/make-4.4/make pkg-stats
-                       /home/jenkins/make-4.4/make legal-info
+
+                        # use make-4.4 if make is lower version 
+
+                        # Version format of make
+                        currentver="$(make --version | head -n1 | awk '{print $3}')"
+                        requiredver="4.4"
+
+                        if [ $(printf "${currentver}\n${requiredver}" | sort -V | head -n1 ) = "${requiredver}" ]; then
+                            echo "Current version is ${currentver} and is greater or equal ${requiredver}"
+                            make pkg-stats
+                            make legal-info
+                        else
+                            echo "Current version is ${currentver} and is less then ${requiredver}"
+                            /home/jenkins/make-4.4/make pkg-stats
+                            /home/jenkins/make-4.4/make legal-info
+                        fi
+
                     '''
                 }
 
@@ -394,7 +409,6 @@ pipeline {
                         cd ..
                         rm -r ${WORKSPACE}/git/ni8buildroot
                         rm -r ${WORKSPACE}/buildroot
-                        rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
                         rm -r ${WORKSPACE}/buildroot-external
                     '''
                 }
