@@ -110,6 +110,11 @@ WORKDIR make-4.4
 RUN ./configure
 RUN make
 
+# Install OpenGL
+RUN apt-get install -y libglu1-mesa-dev 
+RUN apt-get install -y freeglut3-dev 
+RUN apt-get install -y mesa-common-dev
+
 WORKDIR ${HOMEDIR}
 
 
