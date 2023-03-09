@@ -437,8 +437,8 @@ pipeline {
                     cd ..
                     rm -r ${WORKSPACE}/git/ni8buildroot
                     rm -r ${WORKSPACE}/buildroot
-                    rm -r ${WORKSPACE}/buildroot-$BUILDROOT_VERSION
                     rm -r ${WORKSPACE}/buildroot-external
+                    rm -r /srv/www/ni8/buildroot_report/*
 				'''
 			}  
 		}
