@@ -110,6 +110,11 @@ WORKDIR make-4.4
 RUN ./configure
 RUN make
 
+# Install OpenGL
+RUN apt-get install -y libglu1-mesa-dev 
+RUN apt-get install -y freeglut3-dev 
+RUN apt-get install -y mesa-common-dev
+
 WORKDIR ${HOMEDIR}
 
 
@@ -123,7 +128,7 @@ RUN echo "Host *.bitbucket.org\n\tStrictHostKeyChecking no\n" >> ${HOMEDIR}/.ssh
 RUN /bin/bash -c "ssh-keyscan bitbucket.org >> ${HOMEDIR}/.ssh/known_hosts"
 
 # Get buildroot - Define BUILDROOT Version
-ENV	BUILDROOT_VERSION 2022.02.8
+ENV	BUILDROOT_VERSION 2022.02.9
 
 
 
