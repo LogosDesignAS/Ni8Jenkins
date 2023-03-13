@@ -152,7 +152,17 @@ pipeline {
                        # Navigate to the build output directory
                     cd ${WORKSPACE}/buildroot/output
 
-                    # TODO: Add code to commit files to the tftp
+                    # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
+                                            
+                    if [ -z "$(ls -A /opt/ni8-build-artifacts/development)" ]; then
+                        # If directory is empty do nothing
+                    else
+                        # Delete all the files in the directory
+                        rm -r /opt/ni8-build-artifacts/development/*
+                    fi
+
+                    # Now copy all the build artifacts to folder
+                    cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/development/
                 '''
             }
 
@@ -242,6 +252,7 @@ pipeline {
                         cd ${WORKSPACE}/buildroot/output
 
                         # TODO: Add code to commit files to the tftp
+                        
                 '''
             }
 
