@@ -116,7 +116,7 @@ RUN apt-get install -y freeglut3-dev
 RUN apt-get install -y mesa-common-dev
 
 # Install Vulkan dev utils
-RUN apt-get install -y vulkan-utils
+RUN apt-get install -y vulkan-tools
 
 WORKDIR ${HOMEDIR}
 
