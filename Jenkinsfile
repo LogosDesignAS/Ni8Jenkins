@@ -251,17 +251,27 @@ pipeline {
                        # Navigate to the build output directory
                         cd ${WORKSPACE}/buildroot/output
 
-                        # TODO: Add code to commit files to the tftp
-                        
+                        # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
+
+                        if [ -z "$(ls -A /opt/ni8-build-artifacts/production)" ]; then
+                            # If directory is empty do nothing
+                        else
+                            # Delete all the files in the directory
+                            rm -r /opt/ni8-build-artifacts/production/*
+                        fi
+
+                        # Now copy all the build artifacts to folder
+                        cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/production/
+
                 '''
             }
 
         }
-        
+
         /*
         *	Run Smoketest
         *	Eg. SSH into a Raspberry Pi connected to Nicore8 and any carrier board
-        *	Run a Python Script that uses the serial connection to:  Load the built bootloader, OP-TEE and kernel. 
+        *	Run a Python Script that uses the serial connection to:  Load the built bootloader, OP-TEE and kernel.
         * 	Run simple test to verify that verify still are functional. Minimal number of tests are carried out in a
         * 	Smoketest
         */
@@ -273,8 +283,8 @@ pipeline {
             }
 
         }
-        
-        
+
+
         // Cleanup after building both the Production and development image
 	stage('Cleanup - Prod') {
             steps {
@@ -342,7 +352,17 @@ pipeline {
                            # Navigate to the build output directory
                         cd ${WORKSPACE}/buildroot/output
 
-                        # TODO: Add code to commit files to the tftp
+                        # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
+
+                        if [ -z "$(ls -A /opt/ni8-build-artifacts/toolbox)" ]; then
+                            # If directory is empty do nothing
+                        else
+                            # Delete all the files in the directory
+                            rm -r /opt/ni8-build-artifacts/toolbox/*
+                        fi
+
+                        # Now copy all the build artifacts to folder
+                        cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/toolbox/
                     '''
                 }
 

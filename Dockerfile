@@ -117,6 +117,9 @@ RUN apt-get install -y mesa-common-dev
 
 # Install Vulkan dev utils
 RUN apt-get install -y vulkan-tools
+RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+RUN wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+RUN apt-get install -y vulkan-sdk
 
 WORKDIR ${HOMEDIR}
 
