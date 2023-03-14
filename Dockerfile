@@ -22,7 +22,7 @@
 
 # Modified by Logos Payment Solution 2022
 
-FROM eclipse-temurin:11.0.13_8-jdk-focal AS jre-build
+FROM eclipse-temurin:19.0.2_7-jdk-jammy AS jre-build
 
 # Generate smaller java runtime without unneeded files
 # for now we include the full module path to maintain compatibility
@@ -33,7 +33,7 @@ RUN jlink \
          --compress=2 \
          --output /javaruntime
 
-FROM debian:bullseye-20211011
+FROM debian:sid-20230227
 
 ARG user=jenkins
 ARG group=jenkins
@@ -85,7 +85,7 @@ RUN apt-get update && apt-get dist-upgrade -y
 RUN apt-get install -y git vim cmake build-essential pkg-config automake make
 RUN apt-get install -y cppcheck
 RUN apt-get install -y curl wget cpio unzip rsync bc u-boot-tools ssh
-RUN apt-get install -y file 
+RUN apt-get install -y file
 RUN apt-get install --reinstall -y coreutils
 RUN apt-get install -y apt-utils
 
@@ -102,7 +102,7 @@ ENV HOME ${HOMEDIR}
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+#RUN pip3 install -r requirements.txt
 
 ## make-4.4
 RUN wget -c https://ftp.gnu.org/gnu/make/make-4.4.tar.gz -O - | tar -xz
@@ -111,15 +111,21 @@ RUN ./configure
 RUN make
 
 # Install OpenGL
-RUN apt-get install -y libglu1-mesa-dev 
-RUN apt-get install -y freeglut3-dev 
+RUN apt-get install -y libglu1-mesa-dev
+RUN apt-get install -y freeglut3-dev
 RUN apt-get install -y mesa-common-dev
+
+# Qt5 is needed for Vulkan
+RUN apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 
 # Install Vulkan dev utils
 RUN apt-get install -y vulkan-tools
-RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc |  tee /etc/apt/trusted.gpg.d/lunarg.asc
 RUN wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-RUN apt-get install -y vulkan-sdk
+RUN apt-get update -y
+RUN apt upgrade -y
+RUN apt-get install -y libvulkan-dev
+
 
 WORKDIR ${HOMEDIR}
 
@@ -154,3 +160,4 @@ LABEL \
     org.opencontainers.image.url="https://www.jenkins.io/" \
     org.opencontainers.image.source="https://github.com/jenkinsci/docker-ssh-agent" \
     org.opencontainers.image.licenses="MIT"
+    
