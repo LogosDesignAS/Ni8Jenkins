@@ -33,7 +33,7 @@ RUN jlink \
          --compress=2 \
          --output /javaruntime
 
-FROM debian:sid-20230227
+FROM debian:bullseye-20230227
 
 ARG user=jenkins
 ARG group=jenkins
@@ -102,7 +102,7 @@ ENV HOME ${HOMEDIR}
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 COPY requirements.txt requirements.txt
-#RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 ## make-4.4
 RUN wget -c https://ftp.gnu.org/gnu/make/make-4.4.tar.gz -O - | tar -xz
@@ -115,15 +115,7 @@ RUN apt-get install -y libglu1-mesa-dev
 RUN apt-get install -y freeglut3-dev
 RUN apt-get install -y mesa-common-dev
 
-# Qt5 is needed for Vulkan
-RUN apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
-
-# Install Vulkan dev utils
-RUN apt-get install -y vulkan-tools
-RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc |  tee /etc/apt/trusted.gpg.d/lunarg.asc
-RUN wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-RUN apt-get update -y
-RUN apt upgrade -y
+# Install Vulkan Headers
 RUN apt-get install -y libvulkan-dev
 
 
@@ -160,4 +152,3 @@ LABEL \
     org.opencontainers.image.url="https://www.jenkins.io/" \
     org.opencontainers.image.source="https://github.com/jenkinsci/docker-ssh-agent" \
     org.opencontainers.image.licenses="MIT"
-    
