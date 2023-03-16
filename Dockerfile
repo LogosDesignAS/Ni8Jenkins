@@ -118,6 +118,7 @@ RUN apt-get install -y mesa-common-dev
 # Install Vulkan Headers
 RUN apt-get install -y libvulkan-dev
 
+RUN apt-get install -y libvulkan1 mesa-vulkan-drivers
 
 WORKDIR ${HOMEDIR}
 
