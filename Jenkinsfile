@@ -156,6 +156,7 @@ pipeline {
                                             
                     if [ -z "$(ls -A /opt/ni8-build-artifacts/development)" ]; then
                         # If directory is empty do nothing
+                        echo "Directory Empty"
                     else
                         # Delete all the files in the directory
                         rm -r /opt/ni8-build-artifacts/development/*
@@ -255,6 +256,7 @@ pipeline {
 
                         if [ -z "$(ls -A /opt/ni8-build-artifacts/production)" ]; then
                             # If directory is empty do nothing
+                            echo "Directory Empty"
                         else
                             # Delete all the files in the directory
                             rm -r /opt/ni8-build-artifacts/production/*
@@ -356,6 +358,7 @@ pipeline {
 
                         if [ -z "$(ls -A /opt/ni8-build-artifacts/toolbox)" ]; then
                             # If directory is empty do nothing
+                            echo "Directory Empty"
                         else
                             # Delete all the files in the directory
                             rm -r /opt/ni8-build-artifacts/toolbox/*
