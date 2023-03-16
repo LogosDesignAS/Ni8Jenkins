@@ -150,20 +150,20 @@ pipeline {
             steps {
                 sh '''
                        # Navigate to the build output directory
-                    cd ${WORKSPACE}/buildroot/output
+                    cd ${WORKSPACE}/buildroot/output/images
 
                     # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
                                             
-                    if [ -z "$(ls -A /opt/ni8-build-artifacts/development)" ]; then
+                    if [ -z "$(ls -A /opt/ni8-build-artifacts/jenkins/development)" ]; then
                         # If directory is empty do nothing
                         echo "Directory Empty"
                     else
                         # Delete all the files in the directory
-                        rm -r /opt/ni8-build-artifacts/development/*
+                        rm -r /opt/ni8-build-artifacts/jenkins/development/*
                     fi
 
                     # Now copy all the build artifacts to folder
-                    cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/development/
+                    cp -a /${WORKSPACE}/buildroot/output/images. /opt/ni8-build-artifacts/jenkins/development/
                 '''
             }
 
@@ -250,20 +250,20 @@ pipeline {
             steps {
                 sh '''
                        # Navigate to the build output directory
-                        cd ${WORKSPACE}/buildroot/output
+                        cd ${WORKSPACE}/buildroot/output/images
 
                         # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
 
-                        if [ -z "$(ls -A /opt/ni8-build-artifacts/production)" ]; then
+                        if [ -z "$(ls -A /opt/ni8-build-artifacts/jenkins/production)" ]; then
                             # If directory is empty do nothing
                             echo "Directory Empty"
                         else
                             # Delete all the files in the directory
-                            rm -r /opt/ni8-build-artifacts/production/*
+                            rm -r /opt/ni8-build-artifacts/jenkins/production/*
                         fi
 
                         # Now copy all the build artifacts to folder
-                        cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/production/
+                        cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/production/
 
                 '''
             }
@@ -352,20 +352,20 @@ pipeline {
                 steps {
                     sh '''
                            # Navigate to the build output directory
-                        cd ${WORKSPACE}/buildroot/output
+                        cd ${WORKSPACE}/buildroot/output/images
 
                         # TODO: Add code to commit files to the tftp - For now just copy the lastest build artifacts to /opt/ni8-build-artifatcs/developemnt - should be moved to artifactory, but isn't available not...
 
-                        if [ -z "$(ls -A /opt/ni8-build-artifacts/toolbox)" ]; then
+                        if [ -z "$(ls -A /opt/ni8-build-artifacts/jenkins/toolbox)" ]; then
                             # If directory is empty do nothing
                             echo "Directory Empty"
                         else
                             # Delete all the files in the directory
-                            rm -r /opt/ni8-build-artifacts/toolbox/*
+                            rm -r /opt/ni8-build-artifacts/jenkins/toolbox/*
                         fi
 
                         # Now copy all the build artifacts to folder
-                        cp -a /${WORKSPACE}/buildroot/output/. /opt/ni8-build-artifacts/toolbox/
+                        cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/toolbox/
                     '''
                 }
 
