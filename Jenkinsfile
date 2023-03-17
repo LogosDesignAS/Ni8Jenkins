@@ -162,8 +162,12 @@ pipeline {
                         rm -r /opt/ni8-build-artifacts/jenkins/development/*
                     fi
 
-                    # Now copy all the build artifacts to folder
-                    cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/development/
+                    # Now copy all the build artifacts to ni8-build-artifacts
+                    cp /${WORKSPACE}/buildroot/output/images/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz /opt/ni8-build-artifacts/jenkins/development/
+                    cp /${WORKSPACE}/buildroot/output/images/emmc.img /opt/ni8-build-artifacts/jenkins/development/
+                    cp /${WORKSPACE}/buildroot/output/images/image.itb /opt/ni8-build-artifacts/jenkins/development/
+                    cp /${WORKSPACE}/buildroot/output/images/tee.bin /opt/ni8-build-artifacts/jenkins/development/
+                    cp /${WORKSPACE}/buildroot/output/images/u-boot.imx /opt/ni8-build-artifacts/jenkins/development/
                 '''
             }
 
@@ -262,8 +266,12 @@ pipeline {
                             rm -r /opt/ni8-build-artifacts/jenkins/production/*
                         fi
 
-                        # Now copy all the build artifacts to folder
-                        cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/production/
+                        # Now copy all the build artifacts to ni8-build-artifacts
+                        cp /${WORKSPACE}/buildroot/output/images/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz /opt/ni8-build-artifacts/jenkins/production/
+                        cp /${WORKSPACE}/buildroot/output/images/emmc.img /opt/ni8-build-artifacts/jenkins/production/
+                        cp /${WORKSPACE}/buildroot/output/images/image.itb /opt/ni8-build-artifacts/jenkins/production/
+                        cp /${WORKSPACE}/buildroot/output/images/tee.bin /opt/ni8-build-artifacts/jenkins/production/
+                        cp /${WORKSPACE}/buildroot/output/images/u-boot.imx /opt/ni8-build-artifacts/jenkins/production/
 
                 '''
             }
@@ -364,8 +372,8 @@ pipeline {
                             rm -r /opt/ni8-build-artifacts/jenkins/toolbox/*
                         fi
 
-                        # Now copy all the build artifacts to folder
-                        cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/toolbox/
+                        # Now copy all the build artifacts to ni8-build-artifatcs
+                        cp /${WORKSPACE}/buildroot/output/images/image.itb /opt/ni8-build-artifacts/jenkins/toolbox/
                     '''
                 }
 
