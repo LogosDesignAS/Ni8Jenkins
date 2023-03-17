@@ -163,7 +163,7 @@ pipeline {
                     fi
 
                     # Now copy all the build artifacts to folder
-                    cp -a /${WORKSPACE}/buildroot/output/images. /opt/ni8-build-artifacts/jenkins/development/
+                    cp -a /${WORKSPACE}/buildroot/output/images/. /opt/ni8-build-artifacts/jenkins/development/
                 '''
             }
 
