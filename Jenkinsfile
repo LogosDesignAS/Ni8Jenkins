@@ -355,6 +355,25 @@ pipeline {
                     '''
                 }
             }
+        // Upload SDK to www to be available without ssh key
+        stage('Upload dev SDK to www/ni8/sdk') {
+                steps {
+                    sh '''
+                        # Delete old SDK if it exists
+                        if [ -z "$(ls -A /srv/www/ni8/sdk)" ]; then
+                            # If directory is empty do nothing
+                            echo "Directory Empty"
+                        else
+                            # Delete all the files in the directory
+                            rm -r /srv/www/ni8/sdk/*
+                        fi
+
+                        # Now copy SDK to /srv/www/ni8/sdk/
+                        cp /${WORKSPACE}/buildroot/output/images/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz /srv/www/ni8/sdk/
+                    '''
+                }
+
+            }
            // Upload build files to tftp server
         stage('Upload Files to TFTP - Toolbox') {
                 steps {
