@@ -14,7 +14,8 @@ $ docker build -t logospaymentsolutions/jenkinsagentni8:agent2  .
  
 # Launch container from image, make sure that everything works, from controller you
 # should be able to schedule and execute jobs on 'Agent 2'. This needs to be run on the 
-# builderbob(172.16.1.126) server, which has the needed SSH keys, otherwise one need to # add system ssh keys for accessing bitbucket read only.
+# builderbob(172.16.1.126) server, which has the needed SSH keys, otherwise one need to 
+# add system ssh keys for accessing bitbucket read only.
 $ docker run --privileged  -it -d --restart unless-stopped --name=agent2 -p 2235:22 \
 -e "JENKINS_AGENT_SSH_PUBKEY=`cat ~/.ssh/jenkins_agent_key.pub`" \
 -v ~/.ssh:/home/jenkins/.ssh-ro:ro -v \
