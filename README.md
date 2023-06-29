@@ -19,7 +19,8 @@ $ docker run --privileged  -it -d --restart unless-stopped --name=agent2 -p 2235
 -e "JENKINS_AGENT_SSH_PUBKEY=`cat ~/.ssh/jenkins_agent_key.pub`" \
 -v ~/.ssh:/home/jenkins/.ssh-ro:ro -v \
 /srv/www/ni8/buildroot_report:/srv/www/ni8/buildroot_report -v \
-/opt/ni8-build-artifacts:/opt/ni8-build-artifacts logospaymentsolutions/jenkinsagentni8:agent2 
+/opt/ni8-build-artifacts:/opt/ni8-build-artifacts -v \
+/srv/www/ni8/sdk:/srv/www/ni8/sdk logospaymentsolutions/jenkinsagentni8:agent2 
  
  
 # If you for some reason needs shell access.
